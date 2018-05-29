@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Фёдор Базанов](https://up.htmlacademy.ru/javascript/14/user/483955).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
