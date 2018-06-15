@@ -3,7 +3,7 @@
 (function () {
   // получение случайного числа в диапозоне от min до max
   var getRandomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.floor(Math.random() * (max + 1 - min) + min);
   };
 
   // Получение случайного элемента из массива

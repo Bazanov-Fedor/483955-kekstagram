@@ -19,162 +19,142 @@
     'Вот это тачка!'
   ];
 
-  // найдём блок куда будем вставлять созданные публикации
-  var sectionPosts = document.querySelector('.pictures');
-
-  var TOTAL_POST = 25;
+  var ACTIVE_POST = 0;
+  var TOTAL_POSTS = 25;
   var MIN_LIKES = 15;
   var MAX_LIKES = 200;
-  /* var MIN_COMMENT = 1;
+  var MIN_COMMENT = 1;
   var MAX_COMMENT = 2;
 
-  var getListComment = function () {
-    var commentList = [];
-    var randomComment = window.getRandomNumber(MIN_COMMENT, MAX_COMMENT);
+  var avatar = {
+    MIN: 1,
+    MAX: 6
+  };
 
-    while (commentList < randomComment) {
-      commentList.push(randomComment);
+  var keyCode = {
+    ESC: 27,
+    ENTER: 13
+  };
+
+  var sectionPosts = document.querySelector('.pictures');
+  var template = document.querySelector('#picture').content.querySelector('.picture__link');
+  var bigPicture = document.querySelector('.big-picture');
+  var btnClose = bigPicture.querySelector('.big-picture__cancel');
+  var bigImg = bigPicture.querySelector('.big-picture__img img');
+  var bigLikes = bigPicture.querySelector('.likes-count');
+  var bigDes = bigPicture.querySelector('.social__caption');
+  var commentsList = bigPicture.querySelector('.social__comments');
+
+  var getListComments = function (items) {
+    var comments = [];
+
+    for (var i = 0; i < items; i++) {
+      comments.push(window.util.getRandomValue(COMMENTS));
     }
-  };*/
 
-  var getArrPosts = function () {
+    return comments;
+  };
+
+  var getArrPost = function () {
     var posts = [];
 
-    for (var i = 0; i < TOTAL_POST; i++) {
-      var imgFix = (i + 1);
+    for (var i = 0; i < TOTAL_POSTS; i++) {
+      var fixScr = (i + 1);
 
       posts[i] = {
-        src: 'photos/' + imgFix + '.jpg',
-        comment: window.util.getRandomValue(COMMENTS),
+        url: 'photos/' + fixScr + '.jpg',
         likes: window.util.getRandomNumber(MIN_LIKES, MAX_LIKES),
-        description: window.util.getRandomValue(DESCRIPTION),
+        comments: getListComments(window.util.getRandomNumber(MIN_COMMENT, MAX_COMMENT)),
+        description: window.util.getRandomValue(DESCRIPTION)
       };
     }
 
     return posts;
   };
 
-  var pushPost = function (posts) {
-    // найдём темплейт и с помошью .content нужные елементы на странице
-    var postTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
-    var postElement = postTemplate.cloneNode(true);
-    // найдём изображение в  публикации
-    var postImg = postTemplate.querySelector('.picture__img');
-    // строка с количеством коментариев
-    var comment = postTemplate.querySelector('.picture__stat--comments');
-    // количество лайков
-    var likes = postTemplate.querySelector('.picture__stat--likes');
+  var pushElementPost = function (posts) {
+    var post = template.cloneNode(true);
+    post.querySelector('.picture__img').src = posts.url;
+    post.querySelector('.picture__stat--likes').textContent = posts.likes;
+    post.querySelector('.picture__stat--comments').textContent = posts.comments.length;
 
-    postImg.src = posts.src;
-    comment.textContent = posts.comment.length;
-    likes.textContent = posts.likes;
-
-    return postElement;
+    return post;
   };
 
-  var fillPosts = function (posts) {
+  var renderPosts = function (posts) {
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < TOTAL_POST; i++) {
-      fragment.appendChild(pushPost(posts[i]));
+
+    for (var i = 0; i < TOTAL_POSTS; i++) {
+      fragment.appendChild(pushElementPost(posts[i]));
     }
 
-    sectionPosts.appendChild(fragment);
+    return sectionPosts.appendChild(fragment);
   };
 
-  // результат функции из 25 объектов с фото
-  var posts = getArrPosts();
-  fillPosts(posts);
-  // ------------------------ //
-  var bigPicture = document.querySelector('.big-picture');
-
-  var showBigP = function () {
-    bigPicture.classList.remove('hidden');
-    bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
-    bigPicture.querySelector('.social__loadmore').classList.add('visually-hidden');
-  };
-
-  showBigP();
-  // -----------------------  //
-  // подставляем из созданного массива обьектов в попап .social__caption
-  var imgBig = bigPicture.querySelector('.big-picture__img img');
-  imgBig.src = posts[0].src;
-
-  var likesBig = bigPicture.querySelector('.likes-count');
-  likesBig.textContent = posts[0].likes;
-
-  var commentBig = bigPicture.querySelector('.comments-count');
-  commentBig.textContent = posts[0].comment;
-
-  var a = bigPicture.querySelector('.social__caption');
-  a.textContent = posts[0].description;
-
-  var AVATAR = {
-    min: 1,
-    max: 6
-  };
-
-  var com = posts[0].comment;
+  var posts = getArrPost();
+  renderPosts(posts);
 
   var getRandomAvatar = function () {
-    return 'img/avatar-' + window.util.getRandomNumber(AVATAR.min, AVATAR.max) + '.svg';
+    return 'img/avatar-' + window.util.getRandomNumber(avatar.MIN, avatar.MAX) + '.svg';
   };
 
   var makeComment = function () {
-    // найдём список комментариев
-    var list = document.querySelector('.social__comments');
-    // remove comments bigFoto post
-    list.innerHTML = '';
-    var fragmentComment = document.createDocumentFragment();
-    // создадим елемент списка для комментария
-    var item = document.createElement('li');
-    // присвоим ему необходимый класс
-    item.classList = 'social__comment social__comment--text';
-    // созадидм аватар комментатора
-    var avatar = document.createElement('img');
-    // присовим аватару заданный класс
-    avatar.classList = 'social__picture';
-    // сгенерируем путь к svg аватара
-    avatar.src = getRandomAvatar();
-    // зададим размеры и alt для изображения
-    avatar.width = '35';
-    avatar.height = '35';
-    avatar.alt = 'Аватар комментатора фотографии';
-    var textComent = document.createTextNode(com);
-    // вcтавим аватар в элемент сипска
-    item.appendChild(avatar);
-    item.appendChild(textComent);
-    fragmentComment.appendChild(item);
-    // дополним в список сгенерированный пункт
-    list.appendChild(fragmentComment);
-  };
+    for (var i = 0; i < posts[ACTIVE_POST].comments.length; i++) {
+      var item = document.createElement('li');
+      var avatarImg = document.createElement('img');
+      var p = document.createElement('p');
 
-  makeComment();
+      item.classList = 'social__comment social__comment--text';
 
-  // -------------------------------------  //
-  var keyCode = {
-    ESC: 27,
-    ENTER: 13
-  };
+      avatarImg.classList = 'social__picture';
+      avatarImg.src = getRandomAvatar();
+      avatarImg.width = '35';
+      avatarImg.height = '35';
+      avatarImg.alt = 'Аватар комментатора фотографии';
 
-  var btnClosePicture = bigPicture.querySelector('.big-picture__cancel');
-  var overlay = document.querySelector('.overlay');
+      p.classList = 'social__text';
+      p.textContent = posts[i].comments;
 
-  // закрытие окна
-  var closeBigPicture = function () {
-    bigPicture.classList.add('hidden');
-  };
-
-  // функция закрытия каринки по нажатию на ESC
-  var onKeydownEsc = function (e) {
-    if (e.keyCode === keyCode.ESC) {
-      closeBigPicture();
+      item.appendChild(avatarImg);
+      item.appendChild(p);
+      commentsList.appendChild(item);
     }
   };
 
-  // Навешивание обработчиковт
-  // закрытие большой фотографии по клику на х или по оверлею
-  btnClosePicture.addEventListener('click', closeBigPicture);
-  overlay.addEventListener('click', closeBigPicture);
-  // закрытие по ESC
-  document.addEventListener('keydown', onKeydownEsc);
+  var showBigPicture = function () {
+    bigPicture.classList.remove('hidden');
+    bigPicture.querySelector('.social__comment-count').classList.add('visually-hidden');
+    bigPicture.querySelector('.social__loadmore').classList.add('visually-hidden');
+
+    bigImg.src = posts[ACTIVE_POST].url;
+    bigLikes.textContent = posts[ACTIVE_POST].likes;
+    bigDes.textContent = posts[ACTIVE_POST].description;
+
+    makeComment();
+  };
+
+  var closePicture = function () {
+    bigPicture.classList.add('hidden');
+    btnClose.removeEventListener('click', closePicture);
+    btnClose.removeEventListener('keydown', onKeydownEnter);
+    document.removeEventListener('keydown', onKeydownESC);
+  };
+
+  var onKeydownESC = function (evt) {
+    if (evt.keyCode === keyCode.ESC) {
+      closePicture();
+    }
+  };
+
+  var onKeydownEnter = function (evt) {
+    if (evt.keyCode === keyCode.ENTER) {
+      closePicture();
+    }
+  };
+
+  btnClose.addEventListener('click', closePicture);
+  btnClose.addEventListener('keydown', onKeydownEnter);
+  document.addEventListener('keydown', onKeydownESC);
+
+  showBigPicture();
 })();
