@@ -43,7 +43,7 @@
 
                   <fieldset class="img-upload__resize resize">
                     <button type="button" class="resize__control resize__control--minus">Уменьшить</button>
-                    <input type="text" class="resize__control resize__control--value" value="55%" title="Image Scale" name="scale" readonly>
+                    <input type="text" class="resize__control resize__control--value" value="100%" title="Image Scale" name="scale" readonly>
                     <button type="button" class="resize__control resize__control--plus">Увеличить</button>
                   </fieldset>
 
@@ -111,7 +111,7 @@
 
                 <fieldset class="img-upload__text text">
                   <input class="text__hashtags" name="hashtags" placeholder="#хэш-тег">
-                  <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
+                  <textarea class="text__description" name="description" placeholder="Ваш комментарий..." maxlength="140"></textarea>
                 </fieldset>
 
                 <button type="submit" class="img-upload__submit" id="upload-submit">Опубликовать</button>
@@ -138,14 +138,7 @@
           </div>
           <div class="social__comment-count">5 из <span class="comments-count">125</span> комментариев</div>
           <ul class="social__comments">
-            <li class="social__comment">
-              <img class="social__picture" src="img/avatar-4.svg" alt="Аватар комментатора фотографии" width="35" height="35">
-              <p class="social__text">Мега фото! Просто обалдеть. Как вам так удалось?</p>
-            </li>
-            <li class="social__comment">
-              <img class="social__picture" src="img/avatar-3.svg" alt="Аватар комментатора фотографии" width="35" height="35">
-               <p class="social__text">Да это фоташоп!!!!!!!!</p>
-            </li>
+
           </ul>
           <button class="social__loadmore" type="button">Загрузить еще</button>
           <div class="social__footer">
@@ -154,7 +147,7 @@
             <button type="button" class="social__footer-btn" name="button">Отправить</button>
           </div>
         </div>
-        <button type="reset" class="big-picture__cancel cancel" id="picture-cancel">Закрыть</button>
+        <button type="reset" class="big-picture__cancel cancel" id="picture-cancel" tabindex="0">Закрыть</button>
       </div>
     </section>
 
@@ -207,7 +200,12 @@
     </div>
   </template>
   <script src="js/util.js"></script>
-  <script src="js/pictures.js"></script>
-
+  <script src="js/data.js"></script>
+  <script src="js/render-post.js"></script>
+  <script src="js/post-popup.js"></script>
+  <script src="js/upload.js"></script>
+  <script src="js/photo-effects.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/activ.js"></script>
 </body>
 </html>
