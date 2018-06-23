@@ -4,12 +4,11 @@
   var uploadPopap = document.querySelector('.img-upload__overlay');
   var uploadInput = document.querySelector('#upload-file');
   var btnCloseUpload = document.querySelector('.img-upload__cancel');
-  var hashtegField = document.querySelector('.text__hashtags');
-  var textarea = document.querySelector('.text__description');
 
-  var onKeydownEscUpload = function (evt) {
-    var noExitField = evt.target !== hashtegField && evt.target !== textarea;
-    window.util.isKeydownEsc(evt, closeUpload, noExitField);
+  var onKeydownEsc = function (evt) {
+    if (evt.target.tagName !== 'INPUT') {
+      window.util.isKeydownEsc(evt, closeUpload);
+    }
   };
 
   var closeUpload = function () {
@@ -22,7 +21,7 @@
   var openUpload = function () {
     uploadPopap.classList.remove('hidden');
     btnCloseUpload.addEventListener('click', closeUpload);
-    document.addEventListener('keydown', onKeydownEscUpload);
+    document.addEventListener('keydown', onKeydownEsc);
   };
 
   uploadInput.addEventListener('change', openUpload);

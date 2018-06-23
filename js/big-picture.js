@@ -13,7 +13,7 @@
   var getDataBigPost = function (obj) {
     popupUpload.querySelector('.big-picture img').src = obj.url;
     popupUpload.querySelector('.likes-count').textContent = obj.likes;
-    popupUpload.querySelector('.social__caption').textContent = obj.description;
+    popupUpload.querySelector('.social__caption').textContent = 'Ухх ты!)';
   };
 
   var removeCommentList = function () {

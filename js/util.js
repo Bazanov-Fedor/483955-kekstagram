@@ -16,8 +16,8 @@
     return array[Math.floor(Math.random() * array.length)];
   };
 
-  var isKeydownEsc = function (evt, callback, dopCondition) {
-    if (evt.keyCode === keyCode.ESC && dopCondition || undefined) {
+  var isKeydownEsc = function (evt, callback) {
+    if (evt.keyCode === keyCode.ESC) {
       callback();
     }
   };
