@@ -1,21 +1,28 @@
 'use strict';
 
 (function () {
-  var MAX_HESTAG = 5;
+  var hestagData = {
+    START_POSITION: 0,
+    MAX_COUNT: 5,
+    MIN_LENGTH: 1,
+    MAX_LENGTH: 20,
+    VALID_POSITION: 1
+  };
+
   var formSubmit = document.querySelector('#upload-submit');
   var inputHestag = document.querySelector('.text__hashtags');
 
   var getCheckHeshtag = function (heshtag) {
-    if (heshtag[0] !== '#') {
+    if (heshtag[hestagData.START_POSITION] !== '#') {
       inputHestag.setCustomValidity('хэш-тег начинается с символа #');
       return false;
-    } else if (heshtag.length === 1) {
+    } else if (heshtag.length === hestagData.MIN_LENGTH) {
       inputHestag.setCustomValidity('хеш-тег не может состоять только из одной решётки');
       return false;
-    } else if (heshtag.length > 20) {
-      inputHestag.setCustomValidity('максимальная длина одного хэш-тега 20 символов, включая решётку');
+    } else if (heshtag.length > hestagData.MAX_LENGTH) {
+      inputHestag.setCustomValidity('максимальная длина одного хэш-тега ' + hestagData.MAX_LENGTH + ' символов, включая решётку');
       return false;
-    } else if (heshtag.indexOf('#', 1) > 0) {
+    } else if (heshtag.indexOf('#', hestagData.VALID_POSITION) > 0) {
       inputHestag.setCustomValidity('хэш-теги разделяются пробелами');
       return false;
     }
@@ -33,12 +40,13 @@
         break;
       }
 
-      if (hestags.indexOf(hestags[i], i + 1) > 0) {
+      var hextStep = i + 1;
+      if (hestags.indexOf(hestags[i], hextStep) > 0) {
         inputHestag.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
       }
 
-      if (hestags.length > MAX_HESTAG) {
-        inputHestag.setCustomValidity('хэштегов может быть максимум 5');
+      if (hestags.length > hestagData.MAX_COUNT) {
+        inputHestag.setCustomValidity('хэштегов может быть максимум ' + hestagData.MAX_COUNT);
       }
 
       if (!inputHestag.validationMessage) {
