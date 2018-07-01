@@ -12,28 +12,33 @@
     },
     chrome: {
       class: 'effects__preview--chrome',
+      css: 'grayscale',
       max: 1,
       min: 0
     },
     sepia: {
       class: 'effects__preview--sepia',
+      css: 'sepia',
       max: 1,
       min: 0
     },
     marvin: {
       class: 'effects__preview--marvin',
+      css: 'invert',
       max: 100,
       min: 0,
       postFix: '%'
     },
     phobos: {
       class: 'effects__preview--phobos',
+      css: 'blur',
       max: 3,
       min: 0,
       postFix: 'px'
     },
     heat: {
       class: 'effects__preview--heat',
+      css: 'brightness',
       max: 3,
       min: 1
     }
@@ -44,9 +49,25 @@
   var line = document.querySelector('.scale__line');
   var pin = document.querySelector('.scale__pin');
   var blockPin = document.querySelector('.img-upload__scale');
+  var effectList = document.querySelector('.effects__list');
+
+  var makeValueFilter = function (value) {
+    pin.style.left = value + 'px';
+    line.style.width = value + 'px';
+  };
+
+  var filterChange = function (max, min, filter, position, filterPostfix) {
+    var postFix = filterPostfix || '';
+    var value = (max - min) * (position / pinPosition.MAX) + min;
+    var change = '' + filter + '(' + value + postFix + ')';
+
+    preview.style.filter = change;
+    effectValue.value = change;
+  };
 
   pin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
+    var selectedFilter = document.querySelector('input[type="radio"]:checked').value;
     var startCoords = evt.clientX;
 
     var onMouseMove = function (moveEvt) {
@@ -63,21 +84,8 @@
         position = pinPosition.MAX;
       }
 
-      pin.style.left = position + 'px';
-      line.style.width = position + 'px';
-
-      var filterChange = function (max, min, filter, filterPostfix) {
-        var postFix = filterPostfix || '';
-        var value = (max - min) * (position / pinPosition.MAX) + min;
-        var change = '' + filter + '(' + value + postFix + ')';
-
-        preview.style.filter = change;
-        effectValue.value = change;
-      };
-
-      filterChange(1, 0, 'sepia');
-      // filterChange(3, 1, 'brightness');
-      // filterChange(100, 0, 'invert', '%');
+      makeValueFilter(position);
+      filterChange(filterCss[selectedFilter].max, filterCss[selectedFilter].min, filterCss[selectedFilter].css, position, filterCss[selectedFilter].postFix);
     };
 
     var onMouseUp = function (upEvt) {
@@ -91,11 +99,6 @@
     document.addEventListener('mouseup', onMouseUp);
   });
 
-  var effectList = document.querySelector('.effects__list');
-  var upload = document.querySelector('.img-upload__overlay');
-  // временно
-  upload.classList.remove('hidden');
-
   var cheskScaleShow = function (elem) {
     return elem.value !== 'none' ? blockPin.classList.remove('hidden') : blockPin.classList.add('hidden');
   };
@@ -103,7 +106,9 @@
   effectList.addEventListener('click', function (evt) {
     var toggler = evt.target.closest('input');
     if (toggler) {
+      makeValueFilter(pinPosition.MAX);
       preview.classList = 'img-upload__preview';
+      preview.removeAttribute('style');
       preview.classList.add(filterCss[toggler.value].class);
       cheskScaleShow(toggler);
     }

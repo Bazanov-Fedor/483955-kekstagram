@@ -16,7 +16,7 @@
     if (heshtag[hestagData.START_POSITION] !== '#') {
       inputHestag.setCustomValidity('хэш-тег начинается с символа #');
       return false;
-    } else if (heshtag.length === hestagData.MIN_LENGTH) {
+    } else if (heshtag.length < hestagData.MIN_LENGTH) {
       inputHestag.setCustomValidity('хеш-тег не может состоять только из одной решётки');
       return false;
     } else if (heshtag.length > hestagData.MAX_LENGTH) {
@@ -31,26 +31,28 @@
   };
 
   var getCheckForm = function (evt) {
-    var hestags = inputHestag.value.toLowerCase().split(' ');
+    if (inputHestag.value !== '') {
+      var hestags = inputHestag.value.toLowerCase().split(' ');
 
-    for (var i = 0; i < hestags.length; i++) {
-      var heshtagValid = getCheckHeshtag(hestags[i]);
+      for (var i = 0; i < hestags.length; i++) {
+        var heshtagValid = getCheckHeshtag(hestags[i]);
 
-      if (!heshtagValid) {
-        break;
-      }
+        if (!heshtagValid) {
+          break;
+        }
 
-      var hextStep = i + 1;
-      if (hestags.indexOf(hestags[i], hextStep) > 0) {
-        inputHestag.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-      }
+        var hextStep = i + 1;
+        if (hestags.indexOf(hestags[i], hextStep) > 0) {
+          inputHestag.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
+        }
 
-      if (hestags.length > hestagData.MAX_COUNT) {
-        inputHestag.setCustomValidity('хэштегов может быть максимум ' + hestagData.MAX_COUNT);
-      }
+        if (hestags.length > hestagData.MAX_COUNT) {
+          inputHestag.setCustomValidity('хэштегов может быть максимум ' + hestagData.MAX_COUNT);
+        }
 
-      if (!inputHestag.validationMessage) {
-        evt.preventDefault();
+        if (!inputHestag.validationMessage) {
+          evt.preventDefault();
+        }
       }
     }
   };

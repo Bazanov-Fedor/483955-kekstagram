@@ -18,11 +18,11 @@
     var value = +resizeInput.value.slice(scaleData.START_ELEM, scaleData.END_ELEM);
 
     if (action === 'reduce' && value !== scaleData.MIN_SIZE) {
-      value = value - scaleData.STEP;
+      value -= scaleData.STEP;
     }
 
     if (action === 'increase' && value !== scaleData.MAX_SIZE) {
-      value = value + scaleData.STEP;
+      value += scaleData.STEP;
     }
 
     preview.style.transform = 'scale(0' + value / 100 + ')';
