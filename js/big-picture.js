@@ -6,6 +6,15 @@
     MAX: 6
   };
 
+  var DESCRIPTION = [
+    'Тестим новую камеру!',
+    'Затусили с друзьями на море',
+    'Как же круто тут кормят',
+    'Отдыхаем...',
+    'Цените каждое мгновенье. Цените тех, кто рядом с вами и отгоняйте все сомненья. Не обижайте всех словами......',
+    'Вот это тачка!'
+  ];
+
   var popupUpload = document.querySelector('.big-picture');
   var btnClose = popupUpload.querySelector('.big-picture__cancel');
   var commentsList = popupUpload.querySelector('.social__comments');
@@ -13,7 +22,7 @@
   var getDataBigPost = function (obj) {
     popupUpload.querySelector('.big-picture img').src = obj.url;
     popupUpload.querySelector('.likes-count').textContent = obj.likes;
-    popupUpload.querySelector('.social__caption').textContent = 'Ухх ты!)';
+    popupUpload.querySelector('.social__caption').textContent = window.util.getRandomValue(DESCRIPTION);
   };
 
   var removeCommentList = function () {
@@ -66,6 +75,7 @@
     btnClose.removeEventListener('click', closePost);
     btnClose.removeEventListener('keydown', onKeydownEnter);
     document.removeEventListener('keydown', onKeydownEsc);
+    document.body.classList.remove('modal-open');
   };
 
   var openPost = function () {
@@ -76,6 +86,7 @@
   };
 
   var showBigPost = function (posts) {
+    document.body.classList.add('modal-open');
     removeCommentList();
     getDataBigPost(posts);
     getCommentsItem(posts);
