@@ -6,6 +6,8 @@
     MAX: 6
   };
 
+  var COMMENT_TOTAL = 5;
+
   var DESCRIPTION = [
     'Тестим новую камеру!',
     'Затусили с друзьями на море',
@@ -35,7 +37,7 @@
   };
 
   var getCommentsItem = function (posts) {
-    for (var i = 0; i < posts.comments.length; i++) {
+    for (var i = 0; i < COMMENT_TOTAL; i++) {
       var item = document.createElement('li');
       item.classList = 'social__comment social__comment--text';
 
@@ -58,8 +60,8 @@
 
   var hiddenElementPicture = function () {
     popupUpload.classList.remove('hidden');
-    popupUpload.querySelector('.social__comment-count').classList.add('visually-hidden');
-    popupUpload.querySelector('.social__loadmore').classList.add('visually-hidden');
+    // popupUpload.querySelector('.social__comment-count').classList.add('visually-hidden');
+    // popupUpload.querySelector('.social__loadmore').classList.add('visually-hidden');
   };
 
   var onKeydownEsc = function (evt) {
