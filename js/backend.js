@@ -10,7 +10,7 @@
     NOT_FOUND: 404
   };
 
-  var MESSAGES = {
+  var Message = {
     ERROR: 'Произошла ошибка соединения',
     ERROR_TIME: 'Запрос не успел выполниться за ',
     ERROR_REQUEST: 'Ошибка запроса',
@@ -22,11 +22,11 @@
     var xhr = new XMLHttpRequest();
 
     xhr.addEventListener('error', function () {
-      onError(MESSAGES.ERROR);
+      onError(Message.ERROR);
     });
 
     xhr.addEventListener('timeout', function () {
-      onError(MESSAGES.ERROR_TIME + xhr.timeout + 'мс');
+      onError(Message.ERROR_TIME + xhr.timeout + 'мс');
     });
 
     xhr.timeout = SERVER_TIMEOUT;
@@ -39,14 +39,14 @@
           onSuccess(xhr.response);
           break;
         case status.ERROR:
-          onError(MESSAGES.ERROR_REQUEST);
+          onError(Message.ERROR_REQUEST);
           break;
         case status.NOT_FOUND:
-          onError(MESSAGES.NOTHING_FOUND);
+          onError(Message.NOTHING_FOUND);
           break;
 
         default:
-          error = MESSAGES.STATUS + xhr.status + ' ' + xhr.statusText;
+          error = Message.STATUS + xhr.status + ' ' + xhr.statusText;
           break;
       }
 
@@ -95,5 +95,4 @@
     onRequestLoad: onRequestLoad,
     onRequestUpload: onRequestUpload,
   };
-
 })();

@@ -1,45 +1,116 @@
 'use strict';
 
 (function () {
-
-  var preview = document.querySelector('.img-upload__preview');
-  var effectList = document.querySelector('.effects__list');
+  var pinPosition = {
+    MIN: 0,
+    MAX: 450
+  };
 
   var filterCss = {
-    none: 'effects__preview effects__preview--none',
-    chrom: 'effects__preview effects__preview--chrome',
-    sepia: 'effects__preview effects__preview--sepia',
-    invert: 'effects__preview effects__preview--marvin',
-    blur: 'effects__preview effects__preview--phobos',
-    brightness: 'effects__preview effects__preview--heat'
+    none: {
+      class: 'effects__preview--none'
+    },
+    chrome: {
+      class: 'effects__preview--chrome',
+      css: 'grayscale',
+      max: 1,
+      min: 0
+    },
+    sepia: {
+      class: 'effects__preview--sepia',
+      css: 'sepia',
+      max: 1,
+      min: 0
+    },
+    marvin: {
+      class: 'effects__preview--marvin',
+      css: 'invert',
+      max: 100,
+      min: 0,
+      postFix: '%'
+    },
+    phobos: {
+      class: 'effects__preview--phobos',
+      css: 'blur',
+      max: 3,
+      min: 0,
+      postFix: 'px'
+    },
+    heat: {
+      class: 'effects__preview--heat',
+      css: 'brightness',
+      max: 3,
+      min: 1
+    }
+  };
+
+  var preview = document.querySelector('.img-upload__preview');
+  var effectValue = document.querySelector('.scale__value');
+  var line = document.querySelector('.scale__line');
+  var pin = document.querySelector('.scale__pin');
+  var blockPin = document.querySelector('.img-upload__scale');
+  var effectList = document.querySelector('.effects__list');
+
+  var makeValueFilter = function (value) {
+    pin.style.left = value + 'px';
+    line.style.width = value + 'px';
+  };
+
+  var filterChange = function (max, min, filter, position, filterPostfix) {
+    var postFix = filterPostfix || '';
+    var value = (max - min) * (position / pinPosition.MAX) + min;
+    var change = '' + filter + '(' + value + postFix + ')';
+
+    preview.style.filter = change;
+    effectValue.value = change;
+  };
+
+  pin.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+    var selectedFilter = document.querySelector('input[type="radio"]:checked').value;
+    var startCoords = evt.clientX;
+
+    var onMouseMove = function (moveEvt) {
+      moveEvt.preventDefault();
+
+      var shift = startCoords - moveEvt.clientX;
+      var position = pin.offsetLeft - shift;
+      startCoords = moveEvt.clientX;
+
+      if (position <= pinPosition.MIN) {
+        position = pinPosition.MIN;
+      }
+      if (position > pinPosition.MAX) {
+        position = pinPosition.MAX;
+      }
+
+      makeValueFilter(position);
+      filterChange(filterCss[selectedFilter].max, filterCss[selectedFilter].min, filterCss[selectedFilter].css, position, filterCss[selectedFilter].postFix);
+    };
+
+    var onMouseUp = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
+  var cheskScaleShow = function (elem) {
+    return elem.value !== 'none' ? blockPin.classList.remove('hidden') : blockPin.classList.add('hidden');
   };
 
   effectList.addEventListener('click', function (evt) {
-    var toggler = evt.target.closest('span');
+    var toggler = evt.target.closest('input');
     if (toggler) {
-      switch (toggler.className) {
-        case 'effects__preview effects__preview--none':
-          preview.className = filterCss.none;
-          break;
-        case 'effects__preview effects__preview--chrome':
-          preview.className = filterCss.chrom;
-          break;
-        case 'effects__preview effects__preview--sepia':
-          preview.className = filterCss.sepia;
-          break;
-        case 'effects__preview effects__preview--marvin':
-          preview.className = filterCss.invert;
-          break;
-        case 'effects__preview effects__preview--phobos':
-          preview.className = filterCss.blur;
-          break;
-        case 'effects__preview effects__preview--heat':
-          preview.className = filterCss.brightness;
-          break;
-
-        default:
-          break;
-      }
+      makeValueFilter(pinPosition.MAX);
+      preview.classList = 'img-upload__preview';
+      preview.removeAttribute('style');
+      preview.classList.add(filterCss[toggler.value].class);
+      cheskScaleShow(toggler);
     }
   });
 })();

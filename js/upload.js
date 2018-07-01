@@ -5,17 +5,17 @@
   var uploadInput = document.querySelector('#upload-file');
   var btnCloseUpload = document.querySelector('.img-upload__cancel');
 
-  var onKeydownEsc = function (evt) {
-    if (evt.target.tagName !== 'INPUT') {
-      window.util.isKeydownEsc(evt, closeUpload);
-    }
-  };
-
   var closeUpload = function () {
     uploadInput.value = '';
     uploadPopap.classList.add('hidden');
     document.removeEventListener('keydown', closeUpload);
     btnCloseUpload.removeEventListener('click', closeUpload);
+  };
+
+  var onKeydownEsc = function (evt) {
+    if (evt.target.tagName !== 'INPUT') {
+      window.util.isKeydownEsc(evt, closeUpload);
+    }
   };
 
   var openUpload = function () {
