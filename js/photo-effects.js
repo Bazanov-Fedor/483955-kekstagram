@@ -80,6 +80,7 @@
       if (position <= pinPosition.MIN) {
         position = pinPosition.MIN;
       }
+
       if (position > pinPosition.MAX) {
         position = pinPosition.MAX;
       }

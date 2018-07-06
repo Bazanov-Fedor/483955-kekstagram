@@ -6,14 +6,28 @@
     ENTER: 13
   };
 
-  // получение случайного числа в диапозоне от min до max
+  var lastTimeout;
+  var DEBOUNCE_INTERVAL = 500;
+
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max + 1 - min) + min);
   };
 
-  // Получение случайного элемента из массива
   var getRandomValue = function (array) {
     return array[Math.floor(Math.random() * array.length)];
+  };
+
+  var getShuffled = function (array) {
+    var j;
+    var x;
+
+    for (var i = array.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      x = array[i];
+      array[i] = array[j];
+      array[j] = x;
+    }
+    return array;
   };
 
   var isKeydownEsc = function (evt, callback) {
@@ -28,11 +42,19 @@
     }
   };
 
-  // imports util
+  var debounce = function (callback) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(callback, DEBOUNCE_INTERVAL);
+  };
+
   window.util = {
     getRandomNumber: getRandomNumber,
     getRandomValue: getRandomValue,
+    getShuffled: getShuffled,
     isKeydownEsc: isKeydownEsc,
-    isKeydownEnter: isKeydownEnter
+    isKeydownEnter: isKeydownEnter,
+    debounce: debounce
   };
 })();
