@@ -1,66 +1,80 @@
 'use strict';
 
 (function () {
+  var inputHashtag = document.querySelector('.text__hashtags');
+  var submitButton = document.querySelector('#upload-submit');
+  var form = document.querySelector('.img-upload__form');
+  var imgError = document.querySelector('.img-upload__message--error');
+
   var hestagData = {
     START_POSITION: 0,
     MAX_COUNT: 5,
-    MIN_LENGTH: 1,
+    MIN_LENGTH: 2,
     MAX_LENGTH: 20,
     VALID_POSITION: 1
   };
 
-  var formSubmit = document.querySelector('#upload-submit');
-  var inputHestag = document.querySelector('.text__hashtags');
+  var message = {
+    HESTAG_START: 'Хэш-тег начинается с символа #',
+    HESTAG_MIN_SYMBOL: 'Хеш-тег не может состоять только из одной решётки',
+    HESTAG_MAX_LENGTH: 'Максимальная длина одного хэш-тега ',
+    HESTAG_VALUE_INCLUSIVE: ' имволов, включая решётку',
+    HESTAG_NO_REPEAT: 'Один и тот же хэш-тег не может быть использован дважды',
+    HESTAG_MAX_NUMBER: 'Хэштегов может быть максимум ',
+    HESTAG_SEPARATOR: 'Хэш-теги разделяются пробелами'
+  };
 
-  var getCheckHeshtag = function (heshtag) {
-    if (heshtag[hestagData.START_POSITION] !== '#') {
-      inputHestag.setCustomValidity('хэш-тег начинается с символа #');
+  var validateHashtag = function (hashtag) {
+    if (hashtag[hestagData.START_POSITION] !== '#') {
+      inputHashtag.setCustomValidity(message.HESTAG_START);
       return false;
-    } else if (heshtag.length < hestagData.MIN_LENGTH) {
-      inputHestag.setCustomValidity('хеш-тег не может состоять только из одной решётки');
+    } else if (hashtag.length < hestagData.MIN_LENGTH) {
+      inputHashtag.setCustomValidity(message.HESTAG_MIN_SYMBOL);
       return false;
-    } else if (heshtag.length > hestagData.MAX_LENGTH) {
-      inputHestag.setCustomValidity('максимальная длина одного хэш-тега ' + hestagData.MAX_LENGTH + ' символов, включая решётку');
+    } else if (hashtag.length > hestagData.MAX_LENGTH) {
+      inputHashtag.setCustomValidity(message.HESTAG_MAX_LENGTH + hestagData.MAX_LENGTH + message.HESTAG_VALUE_INCLUSIVE);
       return false;
-    } else if (heshtag.indexOf('#', hestagData.VALID_POSITION) > 0) {
-      inputHestag.setCustomValidity('хэш-теги разделяются пробелами');
+    } else if (hashtag.indexOf('#', hestagData.VALID_POSITION) > 0) {
+      inputHashtag.setCustomValidity(message.HESTAG_SEPARATOR);
       return false;
     }
-
     return true;
   };
 
-  var getCheckForm = function (evt) {
-    if (inputHestag.value !== '') {
-      var hestags = inputHestag.value.toLowerCase().split(' ');
+  var showErrorImage = function () {
+    imgError.classList.remove('hidden');
+  };
 
-      for (var i = 0; i < hestags.length; i++) {
-        var heshtagValid = getCheckHeshtag(hestags[i]);
-
-        if (!heshtagValid) {
+  var onSubmitButtonClick = function (evt) {
+    if (inputHashtag.value !== '') {
+      var hashtagArray = inputHashtag.value.toLowerCase().split(' ');
+      for (var i = 0; i < hashtagArray.length; i++) {
+        var isHashtagValid = validateHashtag(hashtagArray[i]);
+        if (!isHashtagValid) {
           break;
         }
-
-        var hextStep = i + 1;
-        if (hestags.indexOf(hestags[i], hextStep) > 0) {
-          inputHestag.setCustomValidity('один и тот же хэш-тег не может быть использован дважды');
-        }
-
-        if (hestags.length > hestagData.MAX_COUNT) {
-          inputHestag.setCustomValidity('хэштегов может быть максимум ' + hestagData.MAX_COUNT);
-        }
-
-        if (!inputHestag.validationMessage) {
-          evt.preventDefault();
+        var positionNextHashtag = i + 1;
+        if (hashtagArray.indexOf(hashtagArray[i], positionNextHashtag) > 0) {
+          inputHashtag.setCustomValidity(message.HESTAG_NO_REPEAT);
+          break;
         }
       }
+      if (hashtagArray.length > hestagData.MAX_COUNT) {
+        inputHashtag.setCustomValidity(message.HESTAG_MAX_NUMBER + hestagData.MAX_COUNT);
+      }
+    }
+
+    if (!inputHashtag.validationMessage) {
+      evt.preventDefault();
+      var formData = new FormData(form);
+      window.backend.onRequestUpload(formData, window.upload.closeUpload, showErrorImage);
     }
   };
 
-  var clearCustomValidity = function () {
-    inputHestag.setCustomValidity('');
+  var onInputInput = function () {
+    inputHashtag.setCustomValidity('');
   };
 
-  formSubmit.addEventListener('click', getCheckForm);
-  inputHestag.addEventListener('input', clearCustomValidity);
+  submitButton.addEventListener('click', onSubmitButtonClick);
+  inputHashtag.addEventListener('input', onInputInput);
 })();
