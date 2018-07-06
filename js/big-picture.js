@@ -25,6 +25,7 @@
     popupUpload.querySelector('.big-picture img').src = obj.url;
     popupUpload.querySelector('.likes-count').textContent = obj.likes;
     popupUpload.querySelector('.social__caption').textContent = window.util.getRandomValue(DESCRIPTION);
+    popupUpload.querySelector('.comments-count').textContent = obj.comments.length;
   };
 
   var removeCommentList = function () {
@@ -60,8 +61,6 @@
 
   var hiddenElementPicture = function () {
     popupUpload.classList.remove('hidden');
-    // popupUpload.querySelector('.social__comment-count').classList.add('visually-hidden');
-    // popupUpload.querySelector('.social__loadmore').classList.add('visually-hidden');
   };
 
   var onKeydownEsc = function (evt) {
