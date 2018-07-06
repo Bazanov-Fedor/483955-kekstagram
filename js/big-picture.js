@@ -64,6 +64,7 @@
   var hiddenElementPicture = function () {
     popupUpload.classList.remove('hidden');
     btnLoadMore.classList.add('hidden');
+
   };
 
   var onKeydownEsc = function (evt) {
