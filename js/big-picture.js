@@ -20,6 +20,7 @@
   var popupUpload = document.querySelector('.big-picture');
   var btnClose = popupUpload.querySelector('.big-picture__cancel');
   var commentsList = popupUpload.querySelector('.social__comments');
+  var btnLoadMore = popupUpload.querySelector('.social__loadmore');
 
   var getDataBigPost = function (obj) {
     popupUpload.querySelector('.big-picture img').src = obj.url;
@@ -38,7 +39,8 @@
   };
 
   var getCommentsItem = function (posts) {
-    for (var i = 0; i < COMMENT_TOTAL; i++) {
+    var commentNumber = posts.comments.length > COMMENT_TOTAL ? COMMENT_TOTAL : posts.comments.length;
+    for (var i = 0; i < commentNumber; i++) {
       var item = document.createElement('li');
       item.classList = 'social__comment social__comment--text';
 
@@ -61,6 +63,7 @@
 
   var hiddenElementPicture = function () {
     popupUpload.classList.remove('hidden');
+    btnLoadMore.classList.add('hidden');
   };
 
   var onKeydownEsc = function (evt) {
