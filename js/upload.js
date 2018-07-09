@@ -19,7 +19,7 @@
     window.util.isKeydownEsc(evt, closeUploadOverlay);
   };
 
-  var onInputChange = function () {
+  var onUploadInputChange = function () {
     uploadPopap.classList.remove('hidden');
     btnCloseUpload.addEventListener('click', closeUploadOverlay);
     document.addEventListener('keydown', onOverlayKeydownEsc);
@@ -34,13 +34,13 @@
     document.addEventListener('keydown', onOverlayKeydownEsc);
   };
 
-  uploadInput.addEventListener('change', onInputChange);
+  uploadInput.addEventListener('change', onUploadInputChange);
   inputHashtag.addEventListener('focus', onInputFocus);
   inputHashtag.addEventListener('blur', onInputBlur);
   textarea.addEventListener('focus', onInputFocus);
   textarea.addEventListener('blur', onInputBlur);
 
   window.upload = {
-    closeUpload: closeUploadOverlay
+    closeUploadOverlay: closeUploadOverlay
   };
 })();

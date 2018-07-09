@@ -94,6 +94,8 @@ main {
   background-color: #ffffff;
   border-radius: 5px;
   transform: translate(-50%, -50%);
+
+  z-index: 50;
 }
 
 .btn-error {
@@ -116,6 +118,29 @@ main {
 
 .btn-error:active {
   transform: translateY(1px)
+}
+
+.error__upload {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
+
+  display: block;
+  padding: 1vw;
+
+  font-family: "Open Sans", "Arial", sans-serif;
+  font-weight: 700;
+  font-size: 6vh;
+  line-height: 6vh;
+  text-align: center;
+
+  color: #000000;
+
+  background-color: #ffffff;
+
+  transition: 0.5s;
+  z-index: 100;
 }
 
 

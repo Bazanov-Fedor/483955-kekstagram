@@ -45,7 +45,7 @@
   };
 
   var preview = document.querySelector('.img-upload__preview');
-  var effectValue = document.querySelector('.scale__value');
+  var effectValue = document.querySelector('[name="effect-level"]');
   var line = document.querySelector('.scale__line');
   var pin = document.querySelector('.scale__pin');
   var blockPin = document.querySelector('.img-upload__scale');
@@ -62,7 +62,7 @@
     var change = '' + filter + '(' + value + postFix + ')';
 
     preview.style.filter = change;
-    effectValue.value = change;
+    effectValue.value = value;
   };
 
   pin.addEventListener('mousedown', function (evt) {
@@ -120,6 +120,7 @@
     preview.removeAttribute('style');
     blockPin.classList.add('hidden');
     preview.classList = 'img-upload__preview';
+    // effectValue.value = '100';
   };
 
   window.photoEffect = {

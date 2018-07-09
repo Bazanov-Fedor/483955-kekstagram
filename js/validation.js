@@ -4,7 +4,6 @@
   var inputHashtag = document.querySelector('.text__hashtags');
   var submitButton = document.querySelector('#upload-submit');
   var form = document.querySelector('.img-upload__form');
-  var imgError = document.querySelector('.img-upload__message--error');
 
   var HestagData = {
     START_POSITION: 0,
@@ -41,10 +40,6 @@
     return true;
   };
 
-  var showErrorImage = function () {
-    imgError.classList.remove('hidden');
-  };
-
   var onSubmitButtonClick = function (evt) {
     if (inputHashtag.value !== '') {
       var hashtagArray = inputHashtag.value.toLowerCase().split(' ');
@@ -67,7 +62,7 @@
     if (!inputHashtag.validationMessage) {
       evt.preventDefault();
       var formData = new FormData(form);
-      window.backend.onRequestUpload(formData, window.upload.closeUploadOverlay, showErrorImage);
+      window.backend.onRequestUpload(formData, window.upload.closeUploadOverlay, window.uploadError.onErrorUploadFile);
     }
   };
 
