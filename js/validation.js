@@ -6,7 +6,7 @@
   var form = document.querySelector('.img-upload__form');
   var imgError = document.querySelector('.img-upload__message--error');
 
-  var hestagData = {
+  var HestagData = {
     START_POSITION: 0,
     MAX_COUNT: 5,
     MIN_LENGTH: 2,
@@ -14,7 +14,7 @@
     VALID_POSITION: 1
   };
 
-  var message = {
+  var Message = {
     HESTAG_START: 'Хэш-тег начинается с символа #',
     HESTAG_MIN_SYMBOL: 'Хеш-тег не может состоять только из одной решётки',
     HESTAG_MAX_LENGTH: 'Максимальная длина одного хэш-тега ',
@@ -25,17 +25,17 @@
   };
 
   var validateHashtag = function (hashtag) {
-    if (hashtag[hestagData.START_POSITION] !== '#') {
-      inputHashtag.setCustomValidity(message.HESTAG_START);
+    if (hashtag[HestagData.START_POSITION] !== '#') {
+      inputHashtag.setCustomValidity(Message.HESTAG_START);
       return false;
-    } else if (hashtag.length < hestagData.MIN_LENGTH) {
-      inputHashtag.setCustomValidity(message.HESTAG_MIN_SYMBOL);
+    } else if (hashtag.length < HestagData.MIN_LENGTH) {
+      inputHashtag.setCustomValidity(Message.HESTAG_MIN_SYMBOL);
       return false;
-    } else if (hashtag.length > hestagData.MAX_LENGTH) {
-      inputHashtag.setCustomValidity(message.HESTAG_MAX_LENGTH + hestagData.MAX_LENGTH + message.HESTAG_VALUE_INCLUSIVE);
+    } else if (hashtag.length > HestagData.MAX_LENGTH) {
+      inputHashtag.setCustomValidity(Message.HESTAG_MAX_LENGTH + HestagData.MAX_LENGTH + Message.HESTAG_VALUE_INCLUSIVE);
       return false;
-    } else if (hashtag.indexOf('#', hestagData.VALID_POSITION) > 0) {
-      inputHashtag.setCustomValidity(message.HESTAG_SEPARATOR);
+    } else if (hashtag.indexOf('#', HestagData.VALID_POSITION) > 0) {
+      inputHashtag.setCustomValidity(Message.HESTAG_SEPARATOR);
       return false;
     }
     return true;
@@ -55,19 +55,19 @@
         }
         var positionNextHashtag = i + 1;
         if (hashtagArray.indexOf(hashtagArray[i], positionNextHashtag) > 0) {
-          inputHashtag.setCustomValidity(message.HESTAG_NO_REPEAT);
+          inputHashtag.setCustomValidity(Message.HESTAG_NO_REPEAT);
           break;
         }
       }
-      if (hashtagArray.length > hestagData.MAX_COUNT) {
-        inputHashtag.setCustomValidity(message.HESTAG_MAX_NUMBER + hestagData.MAX_COUNT);
+      if (hashtagArray.length > HestagData.MAX_COUNT) {
+        inputHashtag.setCustomValidity(Message.HESTAG_MAX_NUMBER + HestagData.MAX_COUNT);
       }
     }
 
     if (!inputHashtag.validationMessage) {
       evt.preventDefault();
       var formData = new FormData(form);
-      window.backend.onRequestUpload(formData, window.upload.closeUpload, showErrorImage);
+      window.backend.onRequestUpload(formData, window.upload.closeUploadOverlay, showErrorImage);
     }
   };
 

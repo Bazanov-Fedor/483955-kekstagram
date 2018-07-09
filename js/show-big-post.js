@@ -1,14 +1,7 @@
 'use strict';
 
 (function () {
-  var avatar = {
-    MIN: 1,
-    MAX: 6
-  };
-
-  var COMMENT_TOTAL = 5;
-
-  var DESCRIPTION = [
+  var DESCRIPTIONS = [
     'Тестим новую камеру!',
     'Затусили с друзьями на море',
     'Как же круто тут кормят',
@@ -17,25 +10,32 @@
     'Вот это тачка!'
   ];
 
+  var COMMENT_TOTAL = 5;
+
+  var Avatar = {
+    MIN: 1,
+    MAX: 6
+  };
+
   var popupUpload = document.querySelector('.big-picture');
   var btnClose = popupUpload.querySelector('.big-picture__cancel');
   var commentsList = popupUpload.querySelector('.social__comments');
   var btnLoadMore = popupUpload.querySelector('.social__loadmore');
+  var list = document.querySelector('.social__comments');
 
   var getDataBigPost = function (obj) {
     popupUpload.querySelector('.big-picture img').src = obj.url;
     popupUpload.querySelector('.likes-count').textContent = obj.likes;
-    popupUpload.querySelector('.social__caption').textContent = window.util.getRandomValue(DESCRIPTION);
+    popupUpload.querySelector('.social__caption').textContent = window.util.getRandomValue(DESCRIPTIONS);
     popupUpload.querySelector('.comments-count').textContent = obj.comments.length;
   };
 
   var removeCommentList = function () {
-    var list = document.querySelector('.social__comments');
     list.innerHTML = '';
   };
 
   var getRandomAvatar = function () {
-    return 'img/avatar-' + window.util.getRandomNumber(avatar.MIN, avatar.MAX) + '.svg';
+    return 'img/avatar-' + window.util.getRandomNumber(Avatar.MIN, Avatar.MAX) + '.svg';
   };
 
   var getCommentsItem = function (posts) {
@@ -64,30 +64,33 @@
   var hiddenElementPicture = function () {
     popupUpload.classList.remove('hidden');
     btnLoadMore.classList.add('hidden');
-
   };
 
-  var onKeydownEsc = function (evt) {
-    window.util.isKeydownEsc(evt, closePost);
+  var onOverlayKeydownEsc = function (evt) {
+    window.util.isKeydownEsc(evt, closeUploadOverlay);
   };
 
-  var onKeydownEnter = function (evt) {
-    window.util.isKeydownEnter(evt, closePost);
+  var onBtnCloseOverlayKeydownEnter = function (evt) {
+    window.util.isKeydownEnter(evt, closeUploadOverlay);
   };
 
-  var closePost = function () {
+  var onBtnCloseOverlayClick = function () {
+    closeUploadOverlay();
+  };
+
+  var closeUploadOverlay = function () {
     popupUpload.classList.add('hidden');
-    btnClose.removeEventListener('click', closePost);
-    btnClose.removeEventListener('keydown', onKeydownEnter);
-    document.removeEventListener('keydown', onKeydownEsc);
+    btnClose.removeEventListener('click', onBtnCloseOverlayClick);
+    btnClose.removeEventListener('keydown', onBtnCloseOverlayKeydownEnter);
+    document.removeEventListener('keydown', onOverlayKeydownEsc);
     document.body.classList.remove('modal-open');
   };
 
-  var openPost = function () {
+  var openUploadOverlay = function () {
     hiddenElementPicture();
-    btnClose.addEventListener('click', closePost);
-    btnClose.addEventListener('keydown', onKeydownEnter);
-    document.addEventListener('keydown', onKeydownEsc);
+    btnClose.addEventListener('click', onBtnCloseOverlayClick);
+    btnClose.addEventListener('keydown', onBtnCloseOverlayKeydownEnter);
+    document.addEventListener('keydown', onOverlayKeydownEsc);
   };
 
   var showBigPost = function (posts) {
@@ -95,7 +98,7 @@
     removeCommentList();
     getDataBigPost(posts);
     getCommentsItem(posts);
-    openPost();
+    openUploadOverlay();
   };
 
   window.showBigPost = showBigPost;

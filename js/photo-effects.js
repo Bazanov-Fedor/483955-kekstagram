@@ -6,7 +6,7 @@
     MAX: 450
   };
 
-  var filterCss = {
+  var FilterCss = {
     none: {
       class: 'effects__preview--none'
     },
@@ -86,7 +86,7 @@
       }
 
       makeValueFilter(position);
-      filterChange(filterCss[selectedFilter].max, filterCss[selectedFilter].min, filterCss[selectedFilter].css, position, filterCss[selectedFilter].postFix);
+      filterChange(FilterCss[selectedFilter].max, FilterCss[selectedFilter].min, FilterCss[selectedFilter].css, position, FilterCss[selectedFilter].postFix);
     };
 
     var onMouseUp = function (upEvt) {
@@ -110,8 +110,19 @@
       makeValueFilter(pinPosition.MAX);
       preview.classList = 'img-upload__preview';
       preview.removeAttribute('style');
-      preview.classList.add(filterCss[toggler.value].class);
+      preview.classList.add(FilterCss[toggler.value].class);
       cheskScaleShow(toggler);
     }
   });
+
+  var makeDeafultFilter = function () {
+    makeValueFilter(pinPosition.MAX);
+    preview.removeAttribute('style');
+    blockPin.classList.add('hidden');
+    preview.classList = 'img-upload__preview';
+  };
+
+  window.photoEffect = {
+    makeDeafultFilter: makeDeafultFilter
+  };
 })();

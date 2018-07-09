@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
+  var lastTimeout;
+  var DEBOUNCE_INTERVAL = 500;
+
   var keyCode = {
     ESC: 27,
     ENTER: 13
   };
-
-  var lastTimeout;
-  var DEBOUNCE_INTERVAL = 500;
 
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max + 1 - min) + min);

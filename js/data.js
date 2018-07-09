@@ -1,14 +1,14 @@
 'use strict';
 
 (function () {
+  var NUMBER_NEW_POST = 10;
   var posts = [];
   var sectionPosts = document.querySelector('.pictures');
   var template = document.querySelector('#picture').content.querySelector('.picture__link');
   var filterBlock = document.querySelector('.img-filters');
   var activeButton = document.querySelector('.img-filters__button--active');
-  var NUMBER_NEW_POST = 10;
 
-  var sort = {
+  var Sort = {
     'filter-popular': function (array) {
       return array;
     },
@@ -65,10 +65,10 @@
     });
   };
 
-  var makeSortPost = function (evt) {
+  var onBtnSortClick = function (evt) {
     if (evt.target.tagName === 'BUTTON') {
       var sortArr = posts.slice();
-      sort[evt.target.id](sortArr);
+      Sort[evt.target.id](sortArr);
 
       clearPictures();
       window.util.debounce(addFragment(sortArr));
@@ -76,6 +76,6 @@
     }
   };
 
-  filterBlock.addEventListener('click', makeSortPost);
+  filterBlock.addEventListener('click', onBtnSortClick);
   window.backend.onRequestLoad(onDataLoad, window.backend.onErrorRequest);
 })();

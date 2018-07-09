@@ -3,44 +3,44 @@
 (function () {
   var uploadPopap = document.querySelector('.img-upload__overlay');
   var uploadInput = document.querySelector('#upload-file');
-  var btnCloseUpload = document.querySelector('.img-upload__cancel');
-  var textarea = document.querySelector('.text__description');
-  var inputHashtag = document.querySelector('.text__hashtags');
+  var btnCloseUpload = uploadPopap.querySelector('.img-upload__cancel');
+  var textarea = uploadPopap.querySelector('.text__description');
+  var inputHashtag = uploadPopap.querySelector('.text__hashtags');
   var form = document.querySelector('.img-upload__form');
 
-  var closeUpload = function () {
+  var closeUploadOverlay = function () {
     uploadPopap.classList.add('hidden');
-    document.removeEventListener('keydown', closeUpload);
-    btnCloseUpload.removeEventListener('click', closeUpload);
+    btnCloseUpload.removeEventListener('click', closeUploadOverlay);
+    document.removeEventListener('keydown', onOverlayKeydownEsc);
     form.reset();
   };
 
-  var onKeydownEsc = function (evt) {
-    window.util.isKeydownEsc(evt, closeUpload);
+  var onOverlayKeydownEsc = function (evt) {
+    window.util.isKeydownEsc(evt, closeUploadOverlay);
   };
 
-  var openUpload = function () {
+  var onInputChange = function () {
     uploadPopap.classList.remove('hidden');
-    btnCloseUpload.addEventListener('click', closeUpload);
-    document.addEventListener('keydown', onKeydownEsc);
+    btnCloseUpload.addEventListener('click', closeUploadOverlay);
+    document.addEventListener('keydown', onOverlayKeydownEsc);
+    window.photoEffect.makeDeafultFilter();
   };
 
   var onInputFocus = function () {
-    document.removeEventListener('keydown', onKeydownEsc);
+    document.removeEventListener('keydown', onOverlayKeydownEsc);
   };
 
   var onInputBlur = function () {
-    document.addEventListener('keydown', onKeydownEsc);
+    document.addEventListener('keydown', onOverlayKeydownEsc);
   };
 
-  uploadInput.addEventListener('change', openUpload);
+  uploadInput.addEventListener('change', onInputChange);
   inputHashtag.addEventListener('focus', onInputFocus);
   inputHashtag.addEventListener('blur', onInputBlur);
   textarea.addEventListener('focus', onInputFocus);
   textarea.addEventListener('blur', onInputBlur);
 
   window.upload = {
-    closeUpload: closeUpload
+    closeUpload: closeUploadOverlay
   };
 })();
-

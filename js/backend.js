@@ -4,7 +4,7 @@
   var URL = 'https://js.dump.academy/kekstagram';
   var SERVER_TIMEOUT = 10000;
 
-  var status = {
+  var Status = {
     SUCCESS: 200,
     ERROR: 400,
     NOT_FOUND: 404
@@ -35,13 +35,13 @@
       var error;
 
       switch (xhr.status) {
-        case status.SUCCESS:
+        case Status.SUCCESS:
           onSuccess(xhr.response);
           break;
-        case status.ERROR:
+        case Status.ERROR:
           onError(Message.ERROR_REQUEST);
           break;
-        case status.NOT_FOUND:
+        case Status.NOT_FOUND:
           onError(Message.NOTHING_FOUND);
           break;
 
